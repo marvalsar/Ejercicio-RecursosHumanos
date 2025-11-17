@@ -1,8 +1,8 @@
 
 package com.mycompany.recursoshumanos.Dao;
 
-import com.mycompany.recursosHumanos.config.ConnectionConfig;
-import com.mycompany.recursoshumanos.domain.EstadoCivil;
+import com.mycompany.recursoshumanos.config.ConnectionConfig;
+import com.mycompany.recursoshumanos.domain.estadoCivil;
 import com.mycompany.recursoshumanos.domain.Funcionario;
 import com.mycompany.recursoshumanos.domain.GrupoFamiliar;
 import com.mycompany.recursoshumanos.domain.Sexo;
@@ -11,7 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,28 +20,33 @@ public class FuncionariosDao {
     
     //Consultas SQL
     
-    private static final String GET_FUNCIONARIO = 
-            "SELECT funcionarios.*, familiares.nombresFam AS nombreFamiliar "
-            + "FROM funcionarios "
-            + "LEFT JOIN familiares ON funcionarios.idFuncionario = familiares.idFuncionario ";
+    private static final String GET_FUNCIONARIOS = 
+            "SELECT f.*, tipoIdentificacion.nombreTipoId AS idTipoId, "
+            + "estadoCivil.nombreEstadoCivil AS idEstadoCivil, "
+            + "sexo.nombreSexo AS idSexo "
+            + "FROM funcionarios f "
+            + "LEFT JOIN tipoIdentificacion ON f.idTipoId = tipoIdentificacion.idTipoId "
+            + "LEFT JOIN estadoCivil ON f.idEstadoCivil = estadoCivil.idEstadoCivil "
+            + "LEFT JOIN sexo ON f.idSexo = sexo.idSexo ";
     
-    private static final String CREATE_FUNCIONARIO = 
+    private static final String CREATE_FUNCIONARIOS = 
             "INSERT INTO funcionarios (cedFuncionario, tipoIdentificacion, nombresFunc, apellidosFunc, "
-            + "estadoCivil, sexo, direccionFunc, telefonoFunc, fechaNacimientoFunc) "
+            + "estadoCivil, sexoFunc, direccionFunc, telefonoFunc, fechaNacimientoFunc) "
             + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
-    private static final String GET_FUNCIONARIO_BY_ID = 
-            "SELECT funcionarios.*, familiares.nombresFam "
-            + "FROM funcionarios "
-            + "LEFT JOIN familiares ON funcionarios.idFuncionario = familiares.idFuncionario "
-            + "WHERE funcionarios.idFuncionario = ?";
+    
+    private static final String GET_FUNCIONARIOS_BY_ID = 
+            "SELECT f.*, familiares.nombresFam "
+            + "FROM funcionarios f "
+            + "LEFT JOIN familiares ON f.idFuncionario = familiares.idFuncionario "
+            + "WHERE f.idFuncionario = ?";
          
-    private static final String UPDATE_FUNCIONARIO = 
+    private static final String UPDATE_FUNCIONARIOS = 
             "UPDATE funcionarios SET cedFuncionario = ?, "
             + "tipoIdentificacion = ?, nombresFunc = ?, apellidosFunc = ?, estadoCivil = ?, sexo = ?, "
             + "direccionFunc = ?, telefonoFunc = ?, fechaNacimientoFunc = ? WHERE idFuncionario = ?";   
     
-    private static final String DELETE_FUNCIONARIO =
+    private static final String DELETE_FUNCIONARIOS =
         "DELETE FROM funcionarios WHERE idFuncionario = ?";
     
     // MÉTODO: OBTENER TODOS LOS FUNCIONARIOS
@@ -55,18 +60,19 @@ public class FuncionariosDao {
         
         try {
             connection = ConnectionConfig.getConnection();
-            preparedStatement = connection.prepareStatement(GET_FUNCIONARIO);
+            preparedStatement = connection.prepareStatement(GET_FUNCIONARIOS);
             resultSet = preparedStatement.executeQuery();
             
             while (resultSet.next()) {
                 Funcionario f = new Funcionario();
                 f.setIdFuncionario(resultSet.getInt("idFuncionario"));
-                f.setCedFuncionario(resultSet.getString("cedFuncionario"));
                 f.setTipoIdentificacion(resultSet.getString("idTipoId"));
+                f.setNumeroIdentificacion(resultSet.getString("cedFuncionario"));
+                f.setTipoIdentificacion(resultSet.getString("tipoIdentificacion"));
                 f.setNombresFunc(resultSet.getString("nombresFunc"));
                 f.setApellidosFunc(resultSet.getString("apellidosFunc"));
-                f.setEstadoCivil(resultSet.getString("idEstadoCivil"));
-                f.setSexo(resultSet.getString("idSexo"));
+                f.setEstadoCivil(resultSet.getString("estadoCivil"));
+                f.setSexo(resultSet.getString("sexo"));
                 f.setDireccionFunc(resultSet.getString("direccionFunc"));
                 f.setTelefonoFunc(resultSet.getString("telefonoFunc"));
                 f.setFechaNacimientoFunc(resultSet.getDate("fechaNacimientoFunc").toLocalDate());
@@ -89,7 +95,7 @@ public class FuncionariosDao {
     }
     
        
-    public void create(Funcionario funcionarios) throws SQLException {
+    public void create(Funcionario f) throws SQLException {
         
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -97,13 +103,16 @@ public class FuncionariosDao {
         try {
             
             connection = ConnectionConfig.getConnection();
-            preparedStatement = connection.prepareStatement(CREATE_FUNCIONARIO);
-            preparedStatement.setString(1, funcionarios.getCedFuncionario());
-            preparedStatement.setString(2, funcionarios.getNombresFunc());
-            preparedStatement.setString(3, funcionarios.getApellidosFunc());
-            preparedStatement.setString(4, funcionarios.getEstadoCivil());
-            preparedStatement.setString(5, funcionarios.getDireccionFunc());
-            preparedStatement.setString(6, funcionarios.getTelefonoFunc());
+            preparedStatement = connection.prepareStatement(CREATE_FUNCIONARIOS);
+            preparedStatement.setString(1, f.getNumeroIdentificacion());
+            preparedStatement.setInt(2, f.getIdTipoId()); 
+            preparedStatement.setString(3, f.getNombresFunc());
+            preparedStatement.setString(4, f.getApellidosFunc());
+            preparedStatement.setString(5, f.getEstadoCivil()); 
+            preparedStatement.setString(6, f.getSexo()); 
+            preparedStatement.setString(7, f.getDireccionFunc());
+            preparedStatement.setString(8, f.getTelefonoFunc());
+            preparedStatement.setDate(9, java.sql.Date.valueOf(f.getFechaNacimientoFunc()));
             preparedStatement.executeUpdate();
             
             
@@ -128,17 +137,17 @@ public class FuncionariosDao {
         
         try {
             connection = ConnectionConfig.getConnection();
-            preparedStatement = connection.prepareStatement(GET_FUNCIONARIO_BY_ID);
+            preparedStatement = connection.prepareStatement(GET_FUNCIONARIOS_BY_ID);
             resultSet = preparedStatement.executeQuery();
             
             while (resultSet.next()) {
                 f.setIdFuncionario(resultSet.getInt("idFuncionario"));
-                f.setCedFuncionario(resultSet.getString("cedFuncionario"));
+                f.setNumeroIdentificacion(resultSet.getString("NumeroIdentificacion"));
                 f.setTipoIdentificacion(resultSet.getString("idTipoId"));
                 f.setNombresFunc(resultSet.getString("nombresFunc"));
                 f.setApellidosFunc(resultSet.getString("apellidosFunc"));
-                f.setEstadoCivil(resultSet.getString("idEstadoCivil"));
-                f.setSexo(resultSet.getString("idSexo"));
+                f.setEstadoCivil(resultSet.getString("estadoCivil"));
+                f.setSexo(resultSet.getString("sexo"));
                 f.setDireccionFunc(resultSet.getString("direccionFunc"));
                 f.setTelefonoFunc(resultSet.getString("telefonoFunc"));
                 f.setFechaNacimientoFunc(resultSet.getDate("fechaNacimientoFunc").toLocalDate());
@@ -158,7 +167,7 @@ public class FuncionariosDao {
             }
         }
     }
-    public void updateFuncionario(Funcionario funcionarios) throws SQLException {
+    public void updateFuncionario(Funcionario f) throws SQLException {
         
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -166,13 +175,16 @@ public class FuncionariosDao {
         try {
             
             connection = ConnectionConfig.getConnection();
-            preparedStatement = connection.prepareStatement(UPDATE_FUNCIONARIO);
-            preparedStatement.setString(1, funcionarios.getCedFuncionario());
-            preparedStatement.setString(2, funcionarios.getNombresFunc());
-            preparedStatement.setString(3, funcionarios.getApellidosFunc());
-            preparedStatement.setString(4, funcionarios.getEstadoCivil());
-            preparedStatement.setString(5, funcionarios.getDireccionFunc());
-            preparedStatement.setString(6, funcionarios.getTelefonoFunc());
+            preparedStatement = connection.prepareStatement(UPDATE_FUNCIONARIOS);
+            preparedStatement.setString(1, f.getNumeroIdentificacion());
+            preparedStatement.setInt(2, f.getIdTipoId()); 
+            preparedStatement.setString(3, f.getNombresFunc());
+            preparedStatement.setString(4, f.getApellidosFunc());
+            preparedStatement.setString(5, f.getEstadoCivil()); 
+            preparedStatement.setString(6, f.getSexo()); 
+            preparedStatement.setString(7, f.getDireccionFunc());
+            preparedStatement.setString(8, f.getTelefonoFunc());
+            preparedStatement.setDate(9, java.sql.Date.valueOf(f.getFechaNacimientoFunc()));
             preparedStatement.executeUpdate();
             
             
@@ -196,7 +208,7 @@ public class FuncionariosDao {
         try {
             
             connection = ConnectionConfig.getConnection();
-            preparedStatement = connection.prepareStatement(DELETE_FUNCIONARIO);
+            preparedStatement = connection.prepareStatement(DELETE_FUNCIONARIOS);
             preparedStatement.setInt(1, idFuncionario);
             preparedStatement.executeUpdate();
                        

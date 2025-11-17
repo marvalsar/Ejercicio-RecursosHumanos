@@ -1,7 +1,7 @@
 package com.mycompany.recursoshumanos.Dao;
 
-import com.mycompany.recursosHumanos.config.ConnectionConfig;
-import com.mycompany.recursoshumanos.domain.EstadoCivil;
+import com.mycompany.recursoshumanos.config.ConnectionConfig;
+import com.mycompany.recursoshumanos.domain.estadoCivil;
 import com.mycompany.recursoshumanos.domain.Funcionario;
 import com.mycompany.recursoshumanos.domain.GrupoFamiliar;
 import com.mycompany.recursoshumanos.domain.Parentesco;
@@ -19,28 +19,36 @@ import java.util.List;
        
     // CONSULTAS SQL
     
-    private static final String GET_GRUPOOFAMILIAR = 
-        "SELECT familiares.*, funcionarios.nombresFunc AS nombreFuncionario "
-        + "FROM familiares "
-        + "LEFT JOIN funcionarios ON familiares.idFuncionario = funcionarios.idFuncionario";
+    private static final String GET_FAMILIARES = 
+        "SELECT familiares.*, funcionarios.nombresFunc AS nombresFunc, " 
+        + "tipoIdentificacion.nombreTipoId AS nombreTipoId, " 
+        + "parentesco.nombreParentesco AS nombreParentesco, " 
+        + "estadoCivil.nombreEstadoCivil AS nombreEstadoCivil, " 
+        + "sexo.nombreSexo AS nombreSexo " 
+        + "FROM familiares  "
+        + "LEFT JOIN funcionarios ON familiares.idFuncionario = funcionarios.idFuncionario "  
+        + "LEFT JOIN tipoIdentificacion ON familiares.idTipoId = tipoIdentificacion.idTipoId "  
+        + "LEFT JOIN Parentesco ON familiares.idParentesco = parentesco.idParentesco "    
+        + "LEFT JOIN EstadoCivil ON familiares.idEstadoCivil = estadoCivil.idEstadoCivil "   
+        + "LEFT JOIN Sexo ON familiares.idSexo = sexo.idSexo "; 
     
-    private static final String CREATE_GRUPOFAMILIAR = 
-        "INSERT INTO familiares (idFuncionario, cedFamiliar, tipoIdentificacion, nombreTipoId, nombresFam, apellidosFam, "
-        + "parentesco, , estadoCivil, nombreEstadoCivil, sexo, nombreSexo, direccionFam, telefonoFam, fechaNacimientoFam) "
+    private static final String CREATE_FAMILIARES = 
+        "INSERT INTO fam (idFuncionario, cedFamiliar, tipoIdentificacion, nombreTipoId, nombresFam, apellidosFam, "
+        + "idParentesco, , idEstadoCivil, idSexo, direccionFam, telefonoFam, fechaNacimientoFam) "
         + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
-    private static final String GET_GRUPOFAMILIAR_BY_ID = 
-        "SELECT familiares.*, funcionarios.IdFuncionario AS IdFuncionario "
-        + "FROM familiares "
-        + "LEFT JOIN funcionarios ON familiares.idFuncionario = funcionarios.idFuncionario "
-        + "WHERE familiares.idFamiliar = ?";
+    private static final String GET_FAMILIARES_BY_ID = 
+        "SELECT fam.*, f.IdFuncionario AS IdFuncionario "
+        + "FROM familiares fam "
+        + "LEFT JOIN f ON fam.idFuncionario = f.idFuncionario "
+        + "WHERE fam.idFamiliar = ?";
     
-    private static final String UPDATE_GRUPOFAMILIAR = 
-        "UPDATE familiares SET idFuncionario = ?, cedFamiliar = ?, tipoIdentificacion = ?, nombresFam = ?, "
+    private static final String UPDATE_FAMILIARES = 
+        "UPDATE fam SET idFuncionario = ?, cedFamiliar = ?, tipoIdentificacion = ?, nombresFam = ?, "
         + "apellidosFam = ?, parentesco = ?, estadoCivil = ?, sexo = ?, direccionFam = ?, "
         + "telefonoFam = ?, fechaNacimientoFam = ? WHERE idFamiliar = ?";
     
-    private static final String DELETE_GRUPOFAMILIAR = 
+    private static final String DELETE_FAMILIARES = 
         "DELETE FROM familiares WHERE idFamiliar = ?";
     
     
@@ -57,20 +65,20 @@ import java.util.List;
         
         try {
             connection = ConnectionConfig.getConnection();
-            preparedStatement = connection.prepareStatement(GET_GRUPOOFAMILIAR);
+            preparedStatement = connection.prepareStatement(GET_FAMILIARES);
             resultSet = preparedStatement.executeQuery();
             
             while (resultSet.next()) {
                 GrupoFamiliar fam = new GrupoFamiliar();
                 fam.setIdFamiliar(resultSet.getInt("idFamiliar"));
-                fam.setIdFamiliar(resultSet.getInt("idFamiliar"));
+                fam.setIdFamiliar(resultSet.getInt("idFuncionario"));
                 fam.setCedFamiliar(resultSet.getString("cedFamiliar"));
                 fam.setTipoIdentificacion(resultSet.getString("idTipoId"));
-                fam.setNombreTipoId(resultSet.getString("nombreTipoId"));
                 fam.setNombresFam(resultSet.getString("nombresFam"));
                 fam.setApellidosFam(resultSet.getString("apellidosFam"));
-                fam.setEstadoCivil(resultSet.getString("idEstadoCivil"));
-                fam.setSexo(resultSet.getString("idSexo"));
+                fam.setParentesco(resultSet.getString("nombreParentesco"));
+                fam.setEstadoCivil(resultSet.getString("estadoCivil"));
+                fam.setSexo(resultSet.getString("sexo"));
                 fam.setDireccionFam(resultSet.getString("direccionFam"));
                 fam.setTelefonoFam(resultSet.getString("telefonoFam"));
                 fam.setFechaNacimientoFam(resultSet.getDate("fechaNacimientoFam").toLocalDate());
@@ -101,14 +109,15 @@ import java.util.List;
         
         try {
             connection = ConnectionConfig.getConnection();
-            preparedStatement = connection.prepareStatement(CREATE_GRUPOFAMILIAR);
-            preparedStatement.setInt(1, fam.getIdFamiliar());
+            preparedStatement = connection.prepareStatement(CREATE_FAMILIARES);
+            preparedStatement.setInt(1, fam.getIdFuncionario()); 
             preparedStatement.setString(2, fam.getCedFamiliar());
-            preparedStatement.setString(3, fam.getTipoIdentificacion());
+            preparedStatement.setInt(3, fam.getIdTipoId());
             preparedStatement.setString(4, fam.getNombresFam());
             preparedStatement.setString(5, fam.getApellidosFam());
-            preparedStatement.setString(6, fam.getParentesco());
-            preparedStatement.setString(7, fam.getEstadoCivil());
+            preparedStatement.setString(6, fam.getParentesco()); 
+            preparedStatement.setString(7, fam.getEstadoCivil()); 
+            preparedStatement.setString(8, fam.getSexo()); 
             preparedStatement.setString(9, fam.getDireccionFam());
             preparedStatement.setString(10, fam.getTelefonoFam());
             preparedStatement.setDate(11, java.sql.Date.valueOf(fam.getFechaNacimientoFam()));
@@ -136,7 +145,7 @@ import java.util.List;
         
         try {
             connection = ConnectionConfig.getConnection();
-            preparedStatement = connection.prepareStatement(GET_GRUPOFAMILIAR_BY_ID);
+            preparedStatement = connection.prepareStatement(GET_FAMILIARES_BY_ID);
             preparedStatement.setInt(1, idFamiliar);
             resultSet = preparedStatement.executeQuery();
             
@@ -148,9 +157,9 @@ import java.util.List;
                 fam.setTipoIdentificacion(resultSet.getString("idTipoId"));
                 fam.setNombresFam(resultSet.getString("nombresFam"));
                 fam.setApellidosFam(resultSet.getString("apellidosFam"));
-                fam.setParentesco(resultSet.getString("idParentesco"));
-                fam.setEstadoCivil(resultSet.getString("idEstadocivil"));
-                fam.setSexo(resultSet.getString("idSexo"));
+                fam.setParentesco(resultSet.getString("parentesco"));
+                fam.setEstadoCivil(resultSet.getString("estadoCivil"));
+                fam.setSexo(resultSet.getString("sexo"));
                 fam.setDireccionFam(resultSet.getString("direccionFam"));
                 fam.setTelefonoFam(resultSet.getString("telefonoFam"));
                 fam.setFechaNacimientoFam(resultSet.getDate("fechaNacimientoFam").toLocalDate());
@@ -178,19 +187,18 @@ import java.util.List;
         
         try {
             connection = ConnectionConfig.getConnection();
-            preparedStatement = connection.prepareStatement(UPDATE_GRUPOFAMILIAR);
-            preparedStatement.setInt(1, fam.getIdFuncionario());
+            preparedStatement = connection.prepareStatement(UPDATE_FAMILIARES);
+            preparedStatement.setInt(1, fam.getIdFuncionario()); 
             preparedStatement.setString(2, fam.getCedFamiliar());
-            preparedStatement.setString(3, fam.getTipoIdentificacion());
+            preparedStatement.setInt(3, fam.getIdTipoId());
             preparedStatement.setString(4, fam.getNombresFam());
             preparedStatement.setString(5, fam.getApellidosFam());
-            preparedStatement.setString(6, fam.getParentesco());
-            preparedStatement.setString(7, fam.getEstadoCivil());
-            preparedStatement.setString(8, fam.getSexo());
+            preparedStatement.setString(6, fam.getParentesco()); 
+            preparedStatement.setString(7, fam.getEstadoCivil()); 
+            preparedStatement.setString(8, fam.getSexo()); 
             preparedStatement.setString(9, fam.getDireccionFam());
             preparedStatement.setString(10, fam.getTelefonoFam());
             preparedStatement.setDate(11, java.sql.Date.valueOf(fam.getFechaNacimientoFam()));
-            preparedStatement.setInt(12, fam.getIdFamiliar());
             preparedStatement.executeUpdate();
             
         } finally {
@@ -212,7 +220,7 @@ import java.util.List;
         
         try {
             connection = ConnectionConfig.getConnection();
-            preparedStatement = connection.prepareStatement(DELETE_GRUPOFAMILIAR);
+            preparedStatement = connection.prepareStatement(DELETE_FAMILIARES);
             preparedStatement.setInt(1, idFamiliar);
             preparedStatement.executeUpdate();
             

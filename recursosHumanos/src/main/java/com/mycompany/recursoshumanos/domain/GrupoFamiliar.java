@@ -11,38 +11,38 @@ public class GrupoFamiliar {
     private int idFuncionario;
     private String cedFamiliar;
     private String tipoIdentificacion;
-    private String nombreTipoId;
     private String nombresFam;
     private String apellidosFam;
     private String parentesco;
-    private String nombreParentesco;
     private String estadoCivil; 
-    private String nombreEstadoCivil;
     private String sexo; 
-    private String nombreSexo;
     private String direccionFam;
     private String telefonoFam;
+    private int idParentesco;
+    private int idTipoId;
+    private int idEstadoCivil;
+    private int idSexo;
     private LocalDate fechaNacimientoFam;
          
         public GrupoFamiliar() {
     }
 
-    public GrupoFamiliar(int idFamiliar, int idFuncionario, String cedFamiliar, String tipoIdentificacion, String nombreTipoId, String nombresFam, String apellidosFam, String parentesco, String nombreParentesco, String estadoCivil, String nombreEstadoCivil, String sexo, String nombreSexo, String direccionFam, String telefonoFam, LocalDate fechaNacimientoFam) {
+    public GrupoFamiliar(int idFamiliar, int idFuncionario, String cedFamiliar, String tipoIdentificacion, String nombresFam, String apellidosFam, String parentesco, String estadoCivil, String sexo, String direccionFam, String telefonoFam, int idParentesco, int idTipoId, int idEstadoCivil, int idSexo, LocalDate fechaNacimientoFam) {
         this.idFamiliar = idFamiliar;
         this.idFuncionario = idFuncionario;
         this.cedFamiliar = cedFamiliar;
         this.tipoIdentificacion = tipoIdentificacion;
-        this.nombreTipoId = nombreTipoId;
         this.nombresFam = nombresFam;
         this.apellidosFam = apellidosFam;
         this.parentesco = parentesco;
-        this.nombreParentesco = nombreParentesco;
         this.estadoCivil = estadoCivil;
-        this.nombreEstadoCivil = nombreEstadoCivil;
         this.sexo = sexo;
-        this.nombreSexo = nombreSexo;
         this.direccionFam = direccionFam;
         this.telefonoFam = telefonoFam;
+        this.idParentesco = idParentesco;
+        this.idTipoId = idTipoId;
+        this.idEstadoCivil = idEstadoCivil;
+        this.idSexo = idSexo;
         this.fechaNacimientoFam = fechaNacimientoFam;
     }
 
@@ -78,14 +78,6 @@ public class GrupoFamiliar {
         this.tipoIdentificacion = tipoIdentificacion;
     }
 
-    public String getNombreTipoId() {
-        return nombreTipoId;
-    }
-
-    public void setNombreTipoId(String nombreTipoId) {
-        this.nombreTipoId = nombreTipoId;
-    }
-
     public String getNombresFam() {
         return nombresFam;
     }
@@ -110,14 +102,6 @@ public class GrupoFamiliar {
         this.parentesco = parentesco;
     }
 
-    public String getNombreParentesco() {
-        return nombreParentesco;
-    }
-
-    public void setNombreParentesco(String nombreParentesco) {
-        this.nombreParentesco = nombreParentesco;
-    }
-
     public String getEstadoCivil() {
         return estadoCivil;
     }
@@ -126,28 +110,12 @@ public class GrupoFamiliar {
         this.estadoCivil = estadoCivil;
     }
 
-    public String getNombreEstadoCivil() {
-        return nombreEstadoCivil;
-    }
-
-    public void setNombreEstadoCivil(String nombreEstadoCivil) {
-        this.nombreEstadoCivil = nombreEstadoCivil;
-    }
-
     public String getSexo() {
         return sexo;
     }
 
     public void setSexo(String sexo) {
         this.sexo = sexo;
-    }
-
-    public String getNombreSexo() {
-        return nombreSexo;
-    }
-
-    public void setNombreSexo(String nombreSexo) {
-        this.nombreSexo = nombreSexo;
     }
 
     public String getDireccionFam() {
@@ -166,6 +134,38 @@ public class GrupoFamiliar {
         this.telefonoFam = telefonoFam;
     }
 
+    public int getIdParentesco() {
+        return idParentesco;
+    }
+
+    public void setIdParentesco(int idParentesco) {
+        this.idParentesco = idParentesco;
+    }
+
+    public int getIdTipoId() {
+        return idTipoId;
+    }
+
+    public void setIdTipoId(int idTipoId) {
+        this.idTipoId = idTipoId;
+    }
+
+    public int getIdEstadoCivil() {
+        return idEstadoCivil;
+    }
+
+    public void setIdEstadoCivil(int idEstadoCivil) {
+        this.idEstadoCivil = idEstadoCivil;
+    }
+
+    public int getIdSexo() {
+        return idSexo;
+    }
+
+    public void setIdSexo(int idSexo) {
+        this.idSexo = idSexo;
+    }
+
     public LocalDate getFechaNacimientoFam() {
         return fechaNacimientoFam;
     }
@@ -176,7 +176,9 @@ public class GrupoFamiliar {
 
     @Override
     public String toString() {
-        return "GrupoFamiliar{" + "idFamiliar=" + idFamiliar + ", idFuncionario=" + idFuncionario + ", cedFamiliar=" + cedFamiliar + ", tipoIdentificacion=" + tipoIdentificacion + ", nombreTipoId=" + nombreTipoId + ", nombresFam=" + nombresFam + ", apellidosFam=" + apellidosFam + ", parentesco=" + parentesco + ", nombreParentesco=" + nombreParentesco + ", estadoCivil=" + estadoCivil + ", nombreEstadoCivil=" + nombreEstadoCivil + ", sexo=" + sexo + ", nombreSexo=" + nombreSexo + ", direccionFam=" + direccionFam + ", telefonoFam=" + telefonoFam + ", fechaNacimientoFam=" + fechaNacimientoFam + '}';
+        return "GrupoFamiliar{" + "idFamiliar=" + idFamiliar + ", idFuncionario=" + idFuncionario + ", cedFamiliar=" + cedFamiliar + ", tipoIdentificacion=" + tipoIdentificacion + ", nombresFam=" + nombresFam + ", apellidosFam=" + apellidosFam + ", parentesco=" + parentesco + ", estadoCivil=" + estadoCivil + ", sexo=" + sexo + ", direccionFam=" + direccionFam + ", telefonoFam=" + telefonoFam + ", idParentesco=" + idParentesco + ", idTipoId=" + idTipoId + ", idEstadoCivil=" + idEstadoCivil + ", idSexo=" + idSexo + ", fechaNacimientoFam=" + fechaNacimientoFam + '}';
     }
-        
-    }
+
+    
+}
+    

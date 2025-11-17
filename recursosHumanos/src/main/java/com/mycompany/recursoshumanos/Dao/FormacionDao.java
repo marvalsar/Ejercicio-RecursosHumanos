@@ -1,7 +1,7 @@
 
 package com.mycompany.recursoshumanos.Dao;
 
-import com.mycompany.recursosHumanos.config.ConnectionConfig;
+import com.mycompany.recursoshumanos.config.ConnectionConfig;
 import com.mycompany.recursoshumanos.domain.Formacion;
 import com.mycompany.recursoshumanos.domain.Funcionario;
 import com.mycompany.recursoshumanos.domain.GrupoFamiliar;
@@ -16,7 +16,7 @@ import java.util.List;
 public class FormacionDao {
     //Consultas SQL
     
-    private static final String GET_FORMACION = 
+    private static final String GET_FORMACION_ACADEMICA = 
             "SELECT \n" +
             "    formacion_academica.idFormacionAcadem,\n" +
             "    formacion_academica.idFuncionario,\n" +
@@ -31,22 +31,22 @@ public class FormacionDao {
             "LEFT JOIN funcionarios \n" +
             "    ON formacion_academica.idFuncionario = funcionarios.idFuncionario;";
     
-    private static final String CREATE_FORMACION = 
+    private static final String CREATE_FORMACION_ACADEMICA = 
             "INSERT INTO formacion_academica (idFuncionario, CedFuncionario, universidad, nivelEstudio, tituloObtenido) "
             +"VALUES (?, ?, ?, ?, ?)";
     
-    private static final String GET_FORMACION_BY_ID = 
+    private static final String GET_FORMACION_ACADEMICA_BY_ID = 
             "SELECT funcionarios.*, formacion_academica.nombreNivelEstudio AS nombreNivelEstudio " +
             "FROM funcionarios " +
             "LEFT JOIN formacion_academica ON funcionarios.idFuncionario = formacion_academica.idFuncionario " +
             "WHERE funcionario.idFuncionario = ?";
          
-    private static final String UPDATE_FORMACION = 
+    private static final String UPDATE_FORMACION_ACADEMICA = 
             "UPDATE funcionarios SET cedFuncionario = ?, "
             + "tipoIdentificacion = ?, nombresFunc = ?, apellidosFunc = ?, estadoCivil = ?, sexo = ?, "
             + "direccionFunc = ?, telefonoFunc = ?, fechaNacimientoFunc = ? WHERE idFuncionario = ?";   
     
-    private static final String DELETE_FORMACION =
+    private static final String DELETE_FORMACION_ACADEMICA =
         "DELETE FROM funcionarios WHERE idFuncionario = ?";
     
     // MÉTODO: OBTENER TODOS LOS FUNCIONARIOS
@@ -60,7 +60,7 @@ public class FormacionDao {
         
         try {
             connection = ConnectionConfig.getConnection();
-            preparedStatement = connection.prepareStatement(GET_FORMACION);
+            preparedStatement = connection.prepareStatement(GET_FORMACION_ACADEMICA);
             resultSet = preparedStatement.executeQuery();
             
             while (resultSet.next()) {
@@ -102,7 +102,7 @@ public class FormacionDao {
         try {
             
             connection = ConnectionConfig.getConnection();
-            preparedStatement = connection.prepareStatement(CREATE_FORMACION);
+            preparedStatement = connection.prepareStatement(CREATE_FORMACION_ACADEMICA);
             preparedStatement.setString(1, fn.getCedFuncionario());
             preparedStatement.setString(2, fn.getNombresFunc());
             preparedStatement.setString(3, fn.getApellidosFunc());
@@ -131,7 +131,7 @@ public class FormacionDao {
         
         try {
             connection = ConnectionConfig.getConnection();
-            preparedStatement = connection.prepareStatement(GET_FORMACION_BY_ID);
+            preparedStatement = connection.prepareStatement(GET_FORMACION_ACADEMICA_BY_ID);
             preparedStatement.setInt(1, idFormacionAcademica);
             resultSet = preparedStatement.executeQuery();
             
@@ -170,7 +170,7 @@ public class FormacionDao {
         try {
             
             connection = ConnectionConfig.getConnection();
-            preparedStatement = connection.prepareStatement(UPDATE_FORMACION);
+            preparedStatement = connection.prepareStatement(UPDATE_FORMACION_ACADEMICA);
             preparedStatement.setString(1, fn.getCedFuncionario());
             preparedStatement.setString(2, fn.getNombresFunc());
             preparedStatement.setString(3, fn.getApellidosFunc());
@@ -200,7 +200,7 @@ public class FormacionDao {
         try {
             
             connection = ConnectionConfig.getConnection();
-            preparedStatement = connection.prepareStatement(DELETE_FORMACION);
+            preparedStatement = connection.prepareStatement(DELETE_FORMACION_ACADEMICA);
             preparedStatement.setInt(1, idFormacion);
             preparedStatement.executeUpdate();
                        

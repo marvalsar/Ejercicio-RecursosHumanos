@@ -5,35 +5,35 @@ import java.time.LocalDate;
 public class Funcionario {
        
     private int idFuncionario;
-    private String cedFuncionario;
+    private String numeroIdentificacion;
     private String tipoIdentificacion;
-    private String nombreTipoId;
     private String nombresFunc;
     private String apellidosFunc;
     private String estadoCivil;
-    private String nombreEstadoCivil;
     private String sexo;
-    private String nombreSexo;
     private String direccionFunc;
     private String telefonoFunc;
+    private int idTipoId;
+    private int idEstadoCivil;
+    private int idSexo;
     private LocalDate fechaNacimientoFunc;
 
     public Funcionario() {
     }
 
-    public Funcionario(int idFuncionario, String cedFuncionario, String tipoIdentificacion, String nombreTipoId, String nombresFunc, String apellidosFunc, String estadoCivil, String nombreEstadoCivil, String sexo, String nombreSexo, String direccionFunc, String telefonoFunc, LocalDate fechaNacimientoFunc) {
+    public Funcionario(int idFuncionario, String numeroIdentificacion, String tipoIdentificacion, String nombresFunc, String apellidosFunc, String estadoCivil, String sexo, String direccionFunc, String telefonoFunc, int idTipoId, int idEstadoCivil, int idSexo, LocalDate fechaNacimientoFunc) {
         this.idFuncionario = idFuncionario;
-        this.cedFuncionario = cedFuncionario;
+        this.numeroIdentificacion = numeroIdentificacion;
         this.tipoIdentificacion = tipoIdentificacion;
-        this.nombreTipoId = nombreTipoId;
         this.nombresFunc = nombresFunc;
         this.apellidosFunc = apellidosFunc;
         this.estadoCivil = estadoCivil;
-        this.nombreEstadoCivil = nombreEstadoCivil;
         this.sexo = sexo;
-        this.nombreSexo = nombreSexo;
         this.direccionFunc = direccionFunc;
         this.telefonoFunc = telefonoFunc;
+        this.idTipoId = idTipoId;
+        this.idEstadoCivil = idEstadoCivil;
+        this.idSexo = idSexo;
         this.fechaNacimientoFunc = fechaNacimientoFunc;
     }
 
@@ -45,12 +45,12 @@ public class Funcionario {
         this.idFuncionario = idFuncionario;
     }
 
-    public String getCedFuncionario() {
-        return cedFuncionario;
+    public String getNumeroIdentificacion() {
+        return numeroIdentificacion;
     }
 
-    public void setCedFuncionario(String cedFuncionario) {
-        this.cedFuncionario = cedFuncionario;
+    public void setNumeroIdentificacion(String numeroIdentificacion) {
+        this.numeroIdentificacion = numeroIdentificacion;
     }
 
     public String getTipoIdentificacion() {
@@ -59,14 +59,6 @@ public class Funcionario {
 
     public void setTipoIdentificacion(String tipoIdentificacion) {
         this.tipoIdentificacion = tipoIdentificacion;
-    }
-
-    public String getNombreTipoId() {
-        return nombreTipoId;
-    }
-
-    public void setNombreTipoId(String nombreTipoId) {
-        this.nombreTipoId = nombreTipoId;
     }
 
     public String getNombresFunc() {
@@ -93,28 +85,12 @@ public class Funcionario {
         this.estadoCivil = estadoCivil;
     }
 
-    public String getNombreEstadoCivil() {
-        return nombreEstadoCivil;
-    }
-
-    public void setNombreEstadoCivil(String nombreEstadoCivil) {
-        this.nombreEstadoCivil = nombreEstadoCivil;
-    }
-
     public String getSexo() {
         return sexo;
     }
 
     public void setSexo(String sexo) {
         this.sexo = sexo;
-    }
-
-    public String getNombreSexo() {
-        return nombreSexo;
-    }
-
-    public void setNombreSexo(String nombreSexo) {
-        this.nombreSexo = nombreSexo;
     }
 
     public String getDireccionFunc() {
@@ -133,6 +109,30 @@ public class Funcionario {
         this.telefonoFunc = telefonoFunc;
     }
 
+    public int getIdTipoId() {
+        return idTipoId;
+    }
+
+    public void setIdTipoId(int idTipoId) {
+        this.idTipoId = idTipoId;
+    }
+
+    public int getIdEstadoCivil() {
+        return idEstadoCivil;
+    }
+
+    public void setIdEstadoCivil(int idEstadoCivil) {
+        this.idEstadoCivil = idEstadoCivil;
+    }
+
+    public int getIdSexo() {
+        return idSexo;
+    }
+
+    public void setIdSexo(int idSexo) {
+        this.idSexo = idSexo;
+    }
+
     public LocalDate getFechaNacimientoFunc() {
         return fechaNacimientoFunc;
     }
@@ -143,9 +143,9 @@ public class Funcionario {
 
     @Override
     public String toString() {
-        return "Funcionario{" + "idFuncionario=" + idFuncionario + ", cedFuncionario=" + cedFuncionario + ", tipoIdentificacion=" + tipoIdentificacion + ", nombreTipoId=" + nombreTipoId + ", nombresFunc=" + nombresFunc + ", apellidosFunc=" + apellidosFunc + ", estadoCivil=" + estadoCivil + ", nombreEstadoCivil=" + nombreEstadoCivil + ", sexo=" + sexo + ", nombreSexo=" + nombreSexo + ", direccionFunc=" + direccionFunc + ", telefonoFunc=" + telefonoFunc + ", fechaNacimientoFunc=" + fechaNacimientoFunc + '}';
+        return "Funcionario{" + "idFuncionario=" + idFuncionario + ", numeroIdentificacion=" + numeroIdentificacion + ", tipoIdentificacion=" + tipoIdentificacion + ", nombresFunc=" + nombresFunc + ", apellidosFunc=" + apellidosFunc + ", estadoCivil=" + estadoCivil + ", sexo=" + sexo + ", direccionFunc=" + direccionFunc + ", telefonoFunc=" + telefonoFunc + ", idTipoId=" + idTipoId + ", idEstadoCivil=" + idEstadoCivil + ", idSexo=" + idSexo + ", fechaNacimientoFunc=" + fechaNacimientoFunc + '}';
     }
 
-       
-      
-}
+    
+    
+    }

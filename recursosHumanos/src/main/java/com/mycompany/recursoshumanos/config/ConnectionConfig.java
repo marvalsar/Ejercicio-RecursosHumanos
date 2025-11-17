@@ -1,4 +1,4 @@
-package com.mycompany.recursosHumanos.config;
+package com.mycompany.recursoshumanos.config;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,7 +11,15 @@ public class ConnectionConfig {
     private static final String USER = "root";
     private static final String PASSWORD = "12345678";
     
-    public static Connection getConnection() throws SQLException{
+    static {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("No se encontró el driver de MySQL", e);
+        }
+    }
+
+    public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 }

@@ -32,7 +32,7 @@ public class FuncionarioController {
     }
     
     public void updateFuncionario(Funcionario funcionarios) throws SQLException {
-        funcionarios.getCedFuncionario();
+        funcionarios.getNumeroIdentificacion();
         funcionariosDao.updateFuncionario(funcionarios);
     }
     
